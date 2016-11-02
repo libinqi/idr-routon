@@ -1,0 +1,24 @@
+{
+  "name": "idr-routon",
+  "version": "1.0.3",
+  "description": "routon iDR sdk for node addon",
+  "main": "index.js",
+  "gypfile": true,
+  "scripts":{
+    "build": "node-gyp rebuild --arch=ia32 --msvs_version=2013",
+    "copy": "copy build\\Release\\RoutonRead.node bin\\RoutonRead.node",
+    "install": "npm run build && npm run copy",
+    "test": "node test.js"
+  },
+  "dependencies": {
+  },
+  "author": {
+    "email": "libinqi@outlook.com",
+    "name": "libinqi"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/libinqi/idr-routon.git"
+  }
+}
