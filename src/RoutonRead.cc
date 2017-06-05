@@ -269,6 +269,8 @@ void Delay(uv_work_t *req)
 		    uv_async_send(&baton->async_request);
 		}
 	    }
+		
+		Sleep(10);
 	} while (baton->isRead);
     }
     catch (Exception)
