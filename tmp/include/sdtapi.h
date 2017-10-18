@@ -5,7 +5,6 @@
 // that uses this DLL. This way any other project whose source files include this file see 
 // STDCALL SDTAPI_API functions as being imported from a DLL, wheras this DLL sees symbols
 // defined with this macro as being exported.
-#include "stdafx.h"
 
 #ifdef SDTAPI_EXPORTS
 #define SDTAPI_API __declspec(dllexport)
