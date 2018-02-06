@@ -38,10 +38,8 @@ try {
 
 	console.log('初始化读卡设备：', result ? '成功' : '失败');
 
-	setTimeout(function () {
-		if (result) result = iDR.startRealReadCard();
-		console.log('开始读卡：', result ? '成功' : '失败');
-	}, 1000);
+	if (result) result = iDR.startRealReadCard();
+	console.log('开始读卡：', result ? '成功' : '失败');
 
 	setTimeout(function () {
 		if (result) result = iDR.stopRealReadCard();
