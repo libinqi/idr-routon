@@ -19,20 +19,20 @@ RoutonRead::~RoutonRead()
 
 static std::string GBKToUTF8(const std::string &strGBK)
 {
-    static std::string strOutUTF8 = "";
-    WCHAR *str1;
-    int n = MultiByteToWideChar(CP_ACP, 0, strGBK.c_str(), -1, NULL, 0);
-    str1 = new WCHAR[n];
-    MultiByteToWideChar(CP_ACP, 0, strGBK.c_str(), -1, str1, n);
-    n = WideCharToMultiByte(CP_UTF8, 0, str1, -1, NULL, 0, NULL, NULL);
-    char *str2 = new char[n];
-    WideCharToMultiByte(CP_UTF8, 0, str1, -1, str2, n, NULL, NULL);
-    strOutUTF8 = str2;
-    delete[] str1;
-    str1 = NULL;
-    delete[] str2;
-    str2 = NULL;
-    return strOutUTF8;
+	static std::string strOutUTF8 = "";
+	WCHAR *str1;
+	int n = MultiByteToWideChar(CP_ACP, 0, strGBK.c_str(), -1, NULL, 0);
+	str1 = new WCHAR[n];
+	MultiByteToWideChar(CP_ACP, 0, strGBK.c_str(), -1, str1, n);
+	n = WideCharToMultiByte(CP_UTF8, 0, str1, -1, NULL, 0, NULL, NULL);
+	char *str2 = new char[n];
+	WideCharToMultiByte(CP_UTF8, 0, str1, -1, str2, n, NULL, NULL);
+	strOutUTF8 = str2;
+	delete[] str1;
+	str1 = NULL;
+	delete[] str2;
+	str2 = NULL;
+	return strOutUTF8;
 }
 
 void RoutonRead::Init(Handle<Object> exports)
@@ -50,7 +50,7 @@ void RoutonRead::Init(Handle<Object> exports)
 	NODE_SET_PROTOTYPE_METHOD(tpl, "Authenticate", DR_Authenticate);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "ReadBaseInfos", DR_ReadBaseInfos);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "ICReadCardSN", DR_IC_ReadCardSN);
-	
+
 	NODE_SET_PROTOTYPE_METHOD(tpl, "OpenRealReadCard", DR_Open_RealReadCard);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "StartRealReadCard", DR_Start_RealReadCard);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "StopRealReadCard", DR_Stop_RealReadCard);
@@ -81,7 +81,9 @@ void RoutonRead::New(const FunctionCallbackInfo<Value> &args)
 		const int argc = 1;
 		Local<Value> argv[argc] = {args[0]};
 		Local<Function> cons = Local<Function>::New(isolate, constructor);
-		args.GetReturnValue().Set(cons->NewInstance(argc, argv));
+		Local<Object> result =
+			cons->NewInstance(context, argc, argv).ToLocalChecked();
+		args.GetReturnValue().Set(result);
 	}
 }
 
@@ -217,10 +219,10 @@ void RoutonRead::DR_Open_RealReadCard(const FunctionCallbackInfo<Value> &args)
 
 	if (result)
 	{
-    	bind(isolate, Local<Function>::Cast(args[1]), Local<Function>::Cast(args[2]));
+		bind(isolate, Local<Function>::Cast(args[1]), Local<Function>::Cast(args[2]));
 	}
 
-    args.GetReturnValue().Set(Number::New(isolate, result));
+	args.GetReturnValue().Set(Number::New(isolate, result));
 }
 
 void RoutonRead::DR_Start_RealReadCard(const FunctionCallbackInfo<Value> &args)
@@ -228,9 +230,9 @@ void RoutonRead::DR_Start_RealReadCard(const FunctionCallbackInfo<Value> &args)
 	Isolate *isolate = Isolate::GetCurrent();
 	HandleScope scope(isolate);
 
-    resume();
+	resume();
 
-    args.GetReturnValue().Set(Number::New(isolate, 1));
+	args.GetReturnValue().Set(Number::New(isolate, 1));
 }
 
 void RoutonRead::DR_Stop_RealReadCard(const FunctionCallbackInfo<Value> &args)
@@ -238,9 +240,9 @@ void RoutonRead::DR_Stop_RealReadCard(const FunctionCallbackInfo<Value> &args)
 	Isolate *isolate = Isolate::GetCurrent();
 	HandleScope scope(isolate);
 
-    suspend();
+	suspend();
 
-    args.GetReturnValue().Set(Number::New(isolate, 1));
+	args.GetReturnValue().Set(Number::New(isolate, 1));
 }
 
 void RoutonRead::execute()
@@ -251,7 +253,7 @@ void RoutonRead::execute()
 	{
 		receiver.type = ReceiveType::IDCard;
 
-		int result = ReadBaseInfosPhoto(receiver.name, receiver.gender, receiver.folk, receiver.birthDay, receiver.code, receiver.address,receiver.agency, receiver.expireStart, receiver.expireEnd, "C:\\");
+		int result = ReadBaseInfosPhoto(receiver.name, receiver.gender, receiver.folk, receiver.birthDay, receiver.code, receiver.address, receiver.agency, receiver.expireStart, receiver.expireEnd, "C:\\");
 
 		if (result)
 		{
@@ -259,9 +261,8 @@ void RoutonRead::execute()
 		}
 		else
 		{
-			doError(0,GBKToUTF8("读取身份证信息错误!"));
+			doError(0, GBKToUTF8("读取身份证信息错误!"));
 		}
-
 	}
 	else if (Routon_IC_FindCard())
 	{
@@ -275,7 +276,7 @@ void RoutonRead::execute()
 		}
 		else
 		{
-			doError(0,GBKToUTF8("读取卡信息错误!"));
+			doError(0, GBKToUTF8("读取卡信息错误!"));
 		}
 	}
 }
