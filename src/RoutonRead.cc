@@ -5,6 +5,17 @@
 #include <windows.h>
 
 using namespace v8;
+using v8::Context;
+using v8::Function;
+using v8::FunctionCallbackInfo;
+using v8::FunctionTemplate;
+using v8::Isolate;
+using v8::Local;
+using v8::Number;
+using v8::Object;
+using v8::Persistent;
+using v8::String;
+using v8::Value;
 
 Persistent<Function> RoutonRead::constructor;
 
@@ -64,13 +75,12 @@ void RoutonRead::Init(Handle<Object> exports)
 
 void RoutonRead::New(const FunctionCallbackInfo<Value> &args)
 {
-	Isolate *isolate = Isolate::GetCurrent();
-	HandleScope scope(isolate);
+	Isolate* isolate = args.GetIsolate();
+	Local<Context> context = isolate->GetCurrentContext();
 
 	if (args.IsConstructCall())
 	{
 		// Invoked as constructor: `new MyObject(...)`
-
 		RoutonRead *obj = new RoutonRead();
 		obj->Wrap(args.This());
 		args.GetReturnValue().Set(args.This());
@@ -79,7 +89,7 @@ void RoutonRead::New(const FunctionCallbackInfo<Value> &args)
 	{
 		// Invoked as plain function `MyObject(...)`, turn into construct call.
 		const int argc = 1;
-		Local<Value> argv[argc] = {args[0]};
+		Local<Value> argv[argc] = { args[0] };
 		Local<Function> cons = Local<Function>::New(isolate, constructor);
 		Local<Object> result =
 			cons->NewInstance(context, argc, argv).ToLocalChecked();
