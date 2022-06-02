@@ -202,7 +202,7 @@ void RoutonRead::DR_IC_ReadCardSN(const FunctionCallbackInfo<Value> &args)
 		if (result)
 		{
 			std::string cardIdStr = code;
-			cardIdStr = cardIdStr.substr(0, 2) + cardIdStr.substr(2, 2) + cardIdStr.substr(4, 2) + cardIdStr.substr(6, 2);
+			cardIdStr = cardIdStr.substr(6, 2) + cardIdStr.substr(4, 2) + cardIdStr.substr(2, 2) + cardIdStr.substr(0, 2);
 			//int cardId = strtol(cardIdStr.c_str(), NULL, 16);
 			args.GetReturnValue().Set(String::NewFromUtf8(isolate, cardIdStr.c_str()));
 			delete[] code;
