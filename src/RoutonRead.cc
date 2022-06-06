@@ -282,6 +282,10 @@ void RoutonRead::execute()
 
 		if (result)
 		{
+			std::string cardIdStr = receiver.code;
+			cardIdStr = cardIdStr.substr(6, 2) + cardIdStr.substr(4, 2) + cardIdStr.substr(2, 2) + cardIdStr.substr(0, 2);
+			cardIdStr.copy(receiver.code, 8, 0);
+
 			doReceive(receiver);
 		}
 		else
